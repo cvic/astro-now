@@ -10,11 +10,11 @@
     "deploy": "wrangler deploy"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^12.5.2",
+    "@astrojs/cloudflare": "^12.6.3",
     "@astrojs/mdx": "^4.3.3",
-    "astro": "^5.7.12"
+    "astro": "^5.12.9"
   },
   "devDependencies": {
-    "wrangler": "^4.14.4"
+    "wrangler": "^4.28.1"
   }
 }
