@@ -1,0 +1,120 @@
+
+---
+layout: "@/layouts/Article.astro"
+title: "Setup"
+description: "Despre procesul de setup"
+---
+import PageHeadline from "@/components/PageHeadline.astro";
+import { SITE_TITLE } from "@/consts";
+
+<PageHeadline title={frontmatter.title} />
+
+## Crearea unui proiect nou
+
+```sh
+npm create astro@latest -- --template psephopaiktes/astro-i18n-starter
+```
+
+## Configurare
+
+### 1. Configurează /src/locales.ts
+
+Mai întâi, actualizează fișierul cu setările de limbă.
+
+Setează limba implicită în `DEFAULT_LOCALE_SETTING` și lista limbilor dorite în `LOCALES_SETTING`. Aceasta urmează [configurația Starlight](https://starlight.astro.build/reference/configuration/#locales).
+
+```ts
+// Setează limba implicită a site-ului tău.
+export const DEFAULT_LOCALE_SETTING: string = "en";
+
+export const LOCALES_SETTING: LocaleSetting = {
+    // Adaugă sau elimină limbile suportate.
+	en: {
+		label: "English",
+		lang: "en-US", // opțional
+	},
+	ro: {
+		label: "Română",
+		lang: "ro-RO",
+	},
+};
+```
+
+Te rugăm să consulți următorul link pentru informații despre codurile limbilor:
+
+> [lang - HTML: HyperText Markup Language | MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/lang)
+
+### 2. Configurează astro.config.mjs
+
+Setează URL-ul site-ului tău în `site`.
+
+```diff
+import mdx from '@astrojs/mdx';
+import sitemap from '@astrojs/sitemap';
+import { defineConfig } from 'astro/config';
+import { DEFAULT_LOCALE_SETTING, LOCALES_SETTING } from './src/locales';
+
+export default defineConfig({
+- site: 'https://astro-i18n-starter.pages.dev',
++ site: 'https://your-site.com',
+  i18n: {
+    defaultLocale: DEFAULT_LOCALE_SETTING,
+    locales: Object.keys(LOCALES_SETTING),
+    routing: {
+      prefixDefaultLocale: true,
+      redirectToDefaultLocale: false,
+    },
+  },
+...
+```
+
+Consultă documentația oficială pentru opțiuni detaliate de configurare pentru Astro:
+
+* [Configuration Reference | Docs](https://docs.astro.build/en/reference/configuration-reference/)
+* [Internationalization (i18n) Routing | Docs](https://docs.astro.build/en/guides/internationalization/#configure-i18n-routing)
+
+notă: Schimbarea setărilor `prefixDefaultLocale` și `redirectToDefaultLocale` nu este recomandată. { SITE_TITLE } gestionează procesul de redirecționare cu JavaScript pe partea clientului. Dacă URL-ul nu conține o limbă, va redirecționa către limba implicită. De exemplu, `/setup/` va fi redirecționat către `/en/setup/`.
+
+În plus, dacă dorești să incluzi un subdirector în URL-ul tău, va trebui să [configurezi calea de bază](https://docs.astro.build/reference/configuration-reference/#base) și să folosești `import.meta.env.BASE_URL` în diversele link-uri.
+
+## Structura proiectului
+
+Urmărește [structura proiectului Astro](https://docs.astro.build/en/basics/project-structure/).
+
+```text
+src/
+├── assets/
+│   └── en/, ro/ ...
+├── blog/
+│   └── en/, ro/ ...
+├── components/
+│   └── i18n/
+├── layouts/
+├── pages/
+│   ├── [lang]/
+│   ├── en/, ro/ ...
+│   ├── 404.astro
+│   └── index.astro
+├── styles/
+├── content.config.ts
+├── consts.ts
+├── i18n.ts
+└── locales.ts
+```
+
+### src/components/i18n
+
+Director pentru componente UI utilizate în site-uri multilingve.
+
+### src/pages
+
+- Fișierele din `src/pages/[lang]/` generează fișiere HTML pentru fiecare limbă dintr-un singur fișier `.astro`.
+- Poți de asemenea genera fișiere HTML separate pentru fiecare limbă din directoare precum `src/pages/en/`, `src/pages/ro/` etc.
+
+### src/consts.ts
+
+Fișier pentru date constante ce pot fi importate și utilizate în proiect. Poate fi omis dacă nu este necesar.
+
+### src/i18n.ts
+
+Fișier ce conține definiții ale funcțiilor utilizate în { SITE_TITLE }. În general, nu este necesar să fie modificat.

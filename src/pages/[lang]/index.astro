@@ -1,0 +1,197 @@
+---
+import { LOCALES, useTranslations, type Lang } from "@/i18n";
+import Layout from "@/layouts/Base.astro";
+const t = useTranslations(Astro.currentLocale as Lang);
+import { getRelativeLocaleUrl } from "astro:i18n";
+
+import heroImageEn from "@/assets/en/hero.svg";
+import heroImageRo from "@/assets/ro/hero.svg";
+import { Image } from "astro:assets";
+
+const locale = Astro.currentLocale as Lang;
+
+export const getStaticPaths = () =>
+  Object.keys(LOCALES).map((lang) => ({
+    params: { lang },
+  }));
+---
+
+<Layout>
+  <Image
+    src={locale === "ro" ? heroImageRo : heroImageEn}
+    alt={t({
+      en: "Hello",
+      ro: "Salut",
+    })}
+    loading="eager"
+  />
+
+  <p>
+    <em>
+      {
+        t({
+          ro: "Starter i18n pentru tema Astro",
+          en: "i18n Starter is a simple Astro theme for creating multilingual websites. It supports i18n feature from Astro v4.0.",
+        })
+      }
+    </em>
+  </p>
+
+  <p>
+    <a
+      href={`https://docs.astro.build/${locale}/guides/internationalization/`}
+      target="_blank"
+    >
+      {
+        t({
+          en: "Internationalization (i18n) Routing | Astro Docs",
+          ro: "Rutare internaționalizare (i18n) | Documentație Astro",
+        })
+      }
+      <span class="material-icons-sharp dir">open_in_new</span>
+    </a>
+  </p>
+
+  <p>
+    {
+      t({
+        en: "Basically, only the subdirectory URL scheme is supported. It is managed by the URL as follows for each language. The root URL is redirected to the specified default language.",
+        ro: "Practic, doar schema URL cu subdirector este suportată. Este gestionată astfel pentru fiecare limbă. URL-ul rădăcină este redirecționat către limba implicită specificată.",
+      })
+    }
+  </p>
+
+  <ul>
+    <li>example.com/en/</li>
+    <li>example.com/ro/</li>
+  </ul>
+
+  <h2>
+    {
+      t({
+        en: "Features",
+        ro: "Funcționalități",
+      })
+    }
+  </h2>
+
+  <ul>
+    <li>
+      {
+        t({
+          en: "Support for Astro's official i18n feature",
+          ro: "Suport pentru funcția i18n oficială a Astro",
+        })
+      }
+    </li>
+    <li>
+      {
+        t({
+          en: "Various management methods for multilingual pages",
+          ro: "Metode variate de gestionare a paginilor multilingve",
+        })
+      }
+    </li>
+    <li>
+      {
+        t({
+          en: "Vanilla CSS",
+          ro: "CSS simplu (Vanilla)",
+        })
+      }
+    </li>
+    <li>
+      {
+        t({
+          en: "SEO friendly",
+          ro: "Prietenos cu SEO",
+        })
+      }
+    </li>
+    <li>
+      {
+        t({
+          en: "100/100 Lighthouse performance",
+          ro: "100/100 performanță Lighthouse",
+        })
+      }
+    </li>
+  </ul>
+
+  <h2>
+    {
+      t({
+        en: "Getting Started",
+        ro: "Începeți",
+      })
+    }
+  </h2>
+
+  <p>
+    {
+      t({
+        en: "Assumes basic knowledge of Astro.",
+        ro: "Presupune cunoștințe de bază despre Astro.",
+      })
+    }
+  </p>
+
+  <p>
+    <a href="https://docs.astro.build/" target="_blank">
+      https://docs.astro.build/
+      <span class="material-icons-sharp dir">open_in_new</span>
+    </a>
+  </p>
+
+  <p>
+    {
+      t({
+        en: "If you're okay, let's get started!",
+        ro: "Dacă sunteți gata, haideți să începem!",
+      })
+    }
+  </p>
+
+  <p>
+    <a href={getRelativeLocaleUrl(locale, "setup")} class="start">
+      <span class="material-icons-sharp dir">arrow_forward</span>
+      {
+        t({
+          en: "Start Setup",
+          ro: "Începe configurarea",
+        })
+      }
+    </a>
+  </p>
+</Layout>
+
+<style>
+  ul {
+    margin-block-start: var(--sp-s);
+    list-style: disc;
+    padding-inline-start: 1em;
+  }
+
+  h2 {
+    color: var(--color-theme);
+    margin-block-start: var(--sp-l);
+  }
+
+  em {
+    display: block;
+    font-style: normal;
+    font-size: 1.3em;
+    margin-block-end: var(--sp-m);
+  }
+
+  .start {
+    display: block;
+    width: fit-content;
+    padding: 0.5em;
+    border-radius: 0.5em;
+    background: var(--color-main);
+    color: var(--color-base);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+  }
+</style>
